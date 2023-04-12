@@ -88,7 +88,6 @@ public class S3ReaderConfig {
     @Bean
     @StepScope
     public FlatFileItemReader<Recibo> reciboFileItemReader() {
-        // TODO: HERE IMPEMENT A FLAT ITEM WRITER
         FlatFileItemReader<Recibo> reader = new FlatFileItemReader<>();
 
         reader.setLinesToSkip(0);
@@ -101,6 +100,8 @@ public class S3ReaderConfig {
         movieDataLineMapper.setLineTokenizer(tokenizer);
         reader.setLineMapper(movieDataLineMapper);
         reader.setRecordSeparatorPolicy(new DefaultRecordSeparatorPolicy());
+        
+        
 
         return reader;
     }
