@@ -8,9 +8,13 @@
 
 package es.netmind.banana_invoices.batch.config;
 
+import es.netmind.banana_invoices.batch.processor.ReciboPagadoProcessor;
 import es.netmind.banana_invoices.batch.processor.SimpleProcessor;
 import es.netmind.banana_invoices.batch.reader.SimpleReader;
+import es.netmind.banana_invoices.batch.writer.ReciboSimpleWriter;
 import es.netmind.banana_invoices.batch.writer.SimpleWriter;
+import es.netmind.banana_invoices.models.Recibo;
+
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -28,6 +32,8 @@ import org.springframework.context.annotation.Configuration;
 @EnableBatchProcessing
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class AppMainConfig {
+	
+	
     @Autowired
     private JobBuilderFactory jobs;
 
@@ -35,25 +41,25 @@ public class AppMainConfig {
     private StepBuilderFactory steps;
 
     @Bean
-    ItemReader<String> simpleRead() {
+    ItemReader<Recibo> simpleRead() {
         return new SimpleReader();
     }
 
     @Bean
-    ItemWriter<String> simpleWrite() {
-        return new SimpleWriter();
+    ReciboSimpleWriter simpleWrite() {
+        return new ReciboSimpleWriter();
     }
 
     @Bean
-    ItemProcessor<String, String> simpleProccesor() {
-        return new SimpleProcessor();
+    ReciboPagadoProcessor simpleProccesor() {
+        return new ReciboPagadoProcessor();
     }
 
     @Bean
     public Step step1() {
         return steps.get("step1")
                 .allowStartIfComplete(true)
-                .<String, String>chunk(2)
+                .<Recibo, Recibo>chunk(2)
                 .reader(simpleRead())
                 .processor(simpleProccesor())
                 .writer(simpleWrite())
@@ -68,5 +74,6 @@ public class AppMainConfig {
     }
 
     // TODO: IMPLEMENT STEPS AND JOB FOR RECIBO
+    // falta implementar el job
 
 }

@@ -7,17 +7,17 @@ import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
 
-public class SimpleReader implements ItemReader<String> {
+import es.netmind.banana_invoices.models.Recibo;
+
+public class SimpleReader implements ItemReader<Recibo> {
     final static Logger logger = LoggerFactory.getLogger(SimpleReader.class);
 
-    private final static String[] texts = new String[]{"Hello", "world", "!!!"};
     private static int count = 0;
+    
+    //TODO: falta implementar este reader para que lea del AWS S3, con el config dado
 
     @Override
-    public String read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-        if (count < texts.length) {
-            logger.info("SimpleReader read()...:" + texts[count]);
-            return texts[count++];
-        } else return null;
+    public Recibo read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
+        return null;
     }
 }
