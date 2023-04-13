@@ -20,7 +20,7 @@ public class ReciboValidoProcessor implements ItemProcessor<Recibo, Object> {
     @Override
     public Object process(Recibo recibo) {
         // TODO: HERE GET PAID STATUS AND PROCESS RECIBO - RETURN RECIBO OR RECIBO_INVALIDO
-    	logger.info("Recibo válido processor!!");
+    	logger.info("Recibo valido processor!!");
         return null;
     }
 
