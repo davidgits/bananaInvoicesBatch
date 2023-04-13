@@ -8,21 +8,28 @@ import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 public class ReciboPagadoProcessor implements ItemProcessor<Recibo, Recibo> {
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    //TODO: HERE INJECT PROPERTY api.verification.url
+    @Value("${api.verification.url}")
     private String apiUrl;
     @Autowired
     private RestTemplate restTemplate;
 
     @Override
     public Recibo process(Recibo recibo) throws Exception {
-        // TODO: HERE GET PAID STATUS AND PROCESS RECIBO
-        return null;
+    	PaidStatus pagado = fetchVerificationDataFromAPI(recibo.getId());
+    	
+		if(pagado.getPaid()) {
+			return recibo;
+		}else {
+			return new ReciboInvalido(recibo, "No pagado");
+		}
+
     }
 
     private PaidStatus fetchVerificationDataFromAPI(Long id) throws NoSuchFieldException {

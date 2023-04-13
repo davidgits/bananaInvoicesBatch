@@ -30,22 +30,14 @@ public class ReciboJPAWriter implements ItemWriter<Object> {
     public void write(List<? extends Object> list) throws Exception {
         System.out.println("ReciboJPAWriter write()....:" + list.size());
         
-        List<Recibo> listaMapeada = (List<Recibo>) list;
-        RestTemplate restTemplate = new RestTemplate();
-                
-        String url = "http://localhost:9100/api/v1/invoices/{id}";
         
-        
-        for(Recibo item : listaMapeada){
-        	ResponseEntity<PaidStatus> response = restTemplate.getForEntity(url, PaidStatus.class, item.getId());
-        	if(response.getStatusCode() == HttpStatus.OK) {
-        		if(response.getBody().getPaid()) {
-        			reciboRepo.save(item);
-        		}else {
-        			invalidoRepository.save(new ReciboInvalido(item, "No ha pagado"));
+        for(Object item : list){
+        	if(item != null) {
+        		if(item instanceof ReciboInvalido) {
+        			reciboRepo.save((Recibo) item);
+        		}else {		//	Recibo válido
+        			invalidoRepository.save((ReciboInvalido) item);
         		}
-        	}else {
-        		// Ha petado la petición
         	}
         }
         
